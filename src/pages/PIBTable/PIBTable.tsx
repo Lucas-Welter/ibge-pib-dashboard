@@ -9,7 +9,7 @@ const ITEMS_PER_PAGE = 10;
 const PIBTablePage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   
-  // Buscar dados do PIB utilizando o Tanstack Query
+  // Using Tanstack Query to search PIB data
   const { 
     data: pibData, 
     isLoading, 
@@ -20,33 +20,29 @@ const PIBTablePage = () => {
     queryFn: fetchPIBData,
   });
   
-  // Renderizar o componente de loading durante a busca dos dados
   if (isLoading) {
     return <Loading />;
   }
   
-  // Renderizar o componente de erro caso ocorra algum problema
   if (error) {
     return <Error onRetry={() => refetch()} />;
   }
   
-  // Verificar se temos dados para mostrar
+  // Verifying if there is data to display
   if (!pibData || pibData.length === 0) {
     return <Error message="Não há dados disponíveis para exibição." />;
   }
 
-  // Calcular o número total de páginas
   const totalPages = Math.ceil(pibData.length / ITEMS_PER_PAGE);
   
-  // Obter os dados para a página atual
+  // Obtaining data for the current page and displaying in ascending order 
   const paginatedData = pibData
-    .sort((a, b) => a.year - b.year) // Ordenar por ano (ascendente)
+    .sort((a, b) => a.year - b.year)
     .slice(
       (currentPage - 1) * ITEMS_PER_PAGE,
       currentPage * ITEMS_PER_PAGE
     );
   
-  // Função para formatar valores monetários
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('pt-BR', {
       style: 'currency',
@@ -56,12 +52,10 @@ const PIBTablePage = () => {
     }).format(value);
   };
   
-  // Função para ir para a página anterior
   const goToPreviousPage = () => {
     setCurrentPage(prev => Math.max(prev - 1, 1));
   };
   
-  // Função para ir para a próxima página
   const goToNextPage = () => {
     setCurrentPage(prev => Math.min(prev + 1, totalPages));
   };
