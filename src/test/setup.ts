@@ -29,7 +29,13 @@ class IntersectionObserverMock implements IntersectionObserver {
   }
 }
 
-window.IntersectionObserver = IntersectionObserverMock as any;
+declare global {
+  interface Window { 
+    IntersectionObserver: typeof IntersectionObserverMock;
+  }
+}
+
+window.IntersectionObserver = IntersectionObserverMock;
 
 // Mock matchMedia for responsive design tests
 Object.defineProperty(window, 'matchMedia', {
