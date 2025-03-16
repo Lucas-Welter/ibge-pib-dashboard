@@ -8,10 +8,14 @@ interface CreateChartDataParams {
   showFullChart: boolean;
 }
 
-export function createChartData({ pibData, isMobile, showFullChart }: CreateChartDataParams) {
-  // For mobile view, reduce the number of data points if there are too many
+export function createChartData({ 
+  pibData, 
+  isMobile, 
+  showFullChart
+}: CreateChartDataParams) {
+  // Data simplification for mobile
   const filteredData = isMobile && pibData.length > 10 && !showFullChart
-    ? pibData.filter((_, index) => index % 2 === 0) // Show every other data point on mobile
+    ? pibData.filter((_, index) => index % 2 === 0) 
     : pibData;
 
   return {
@@ -20,21 +24,21 @@ export function createChartData({ pibData, isMobile, showFullChart }: CreateChar
       {
         label: 'PIB Total (em dólares)',
         data: filteredData.map(item => item.pib),
-        borderColor: '#0066CC',
-        backgroundColor: 'rgba(0, 102, 204, 0.1)',
+        borderColor: '#6366F1', 
+        backgroundColor: 'rgba(99, 102, 241, 0.1)', 
         borderWidth: isMobile ? 1.5 : 2,
         pointRadius: isMobile ? 2 : 3,
-        pointBackgroundColor: '#0066CC',
+        pointBackgroundColor: '#6366F1',
         yAxisID: 'y',
       },
       {
         label: 'PIB Per Capita (em dólares)',
         data: filteredData.map(item => item.pibPerCapita),
-        borderColor: '#00AB84',
-        backgroundColor: 'rgba(0, 171, 132, 0.1)',
+        borderColor: '#A855F7',
+        backgroundColor: 'rgba(168, 85, 247, 0.1)',
         borderWidth: isMobile ? 1.5 : 2,
         pointRadius: isMobile ? 2 : 3,
-        pointBackgroundColor: '#00AB84',
+        pointBackgroundColor: '#A855F7',
         yAxisID: 'y1',
       },
     ],
@@ -49,6 +53,10 @@ export function createChartOptions(isMobile: boolean): ChartOptions<'line'> {
       mode: 'index',
       intersect: false,
     },
+    animation: {
+      duration: 1000, 
+      easing: 'easeOutQuart', 
+    },
     plugins: {
       legend: {
         position: isMobile ? 'bottom' : 'top',
@@ -58,6 +66,7 @@ export function createChartOptions(isMobile: boolean): ChartOptions<'line'> {
           font: {
             size: isMobile ? 12 : 14,
           },
+          usePointStyle: true, 
         },
       },
       title: {
@@ -71,15 +80,28 @@ export function createChartOptions(isMobile: boolean): ChartOptions<'line'> {
           top: isMobile ? 5 : 10,
           bottom: isMobile ? 10 : 20,
         },
+        color: '#4B5563',
       },
       tooltip: {
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        titleColor: '#111827', 
+        bodyColor: '#4B5563', 
+        borderColor: '#E5E7EB', 
+        borderWidth: 1,
+        padding: 10,
+        boxPadding: 5,
+        cornerRadius: 8,
         titleFont: {
           size: isMobile ? 12 : 14,
+          weight: 'bold',
         },
         bodyFont: {
           size: isMobile ? 11 : 13,
         },
         callbacks: {
+          title: function(tooltipItems) {
+            return `Ano: ${tooltipItems[0].label}`;
+          },
           label: function (context) {
             let label = context.dataset.label || '';
             if (label) {
@@ -90,18 +112,24 @@ export function createChartOptions(isMobile: boolean): ChartOptions<'line'> {
             }
             return label;
           }
-        }
+        },
+        displayColors: false, 
       }
     },
     scales: {
       x: {
         title: {
-          display: !isMobile, // Hide axis titles on mobile
+          display: !isMobile, // Ocultar títulos de eixo no mobile
           text: 'Ano',
           font: {
             size: 14,
             weight: 'bold',
           },
+          color: '#4B5563', 
+        },
+        grid: {
+          display: true,
+          color: 'rgba(229, 231, 235, 0.5)',
         },
         ticks: {
           autoSkip: true,
@@ -110,13 +138,14 @@ export function createChartOptions(isMobile: boolean): ChartOptions<'line'> {
           font: {
             size: isMobile ? 10 : 12,
           },
-          // For mobile, limit the number of ticks shown
+          color: '#6B7280', 
+          // Limiting ticks on mobile
           callback: function (tickValue, index, ticks) {
-            // Get the label for this tick value
+
             const label = this.getLabelForValue(Number(tickValue));
             
             if (isMobile && ticks.length > 10) {
-              // On mobile, only show every other label when we have many data points
+              // Showing only alternated labels on mobile when ther is too much data
               return index % 2 === 0 ? label : '';
             }
             return label;
@@ -128,17 +157,22 @@ export function createChartOptions(isMobile: boolean): ChartOptions<'line'> {
         display: true,
         position: 'left',
         title: {
-          display: !isMobile, // Hide axis titles on mobile
+          display: !isMobile, 
           text: 'PIB Total (US$)',
           font: {
             size: 14,
             weight: 'bold',
           },
+          color: '#4B5563', 
+        },
+        grid: {
+          color: 'rgba(229, 231, 235, 0.5)', 
         },
         ticks: {
           font: {
             size: isMobile ? 10 : 12,
           },
+          color: '#6B7280',
           callback: function (value) {
             return formatCompactCurrency(Number(value));
           },
@@ -149,12 +183,13 @@ export function createChartOptions(isMobile: boolean): ChartOptions<'line'> {
         display: true,
         position: 'right',
         title: {
-          display: !isMobile, // Hide axis titles on mobile
+          display: !isMobile, 
           text: 'PIB Per Capita (US$)',
           font: {
             size: 14,
             weight: 'bold',
           },
+          color: '#4B5563', 
         },
         grid: {
           drawOnChartArea: false,
@@ -163,6 +198,7 @@ export function createChartOptions(isMobile: boolean): ChartOptions<'line'> {
           font: {
             size: isMobile ? 10 : 12,
           },
+          color: '#6B7280', 
           callback: function (value) {
             return formatWholeNumberCurrency(Number(value));
           },

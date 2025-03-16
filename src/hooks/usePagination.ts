@@ -25,14 +25,10 @@ export function usePagination<T>({
   // Store state in refs to avoid re-renders triggering effects
   const dataRef = useRef<T[] | undefined>(data);
   const [currentPage, setCurrentPage] = useState(initialPage);
-  
-  // Safe data array
   const safeData = data || [];
-  
-  // Calculate total pages
   const totalPages = Math.max(Math.ceil(safeData.length / itemsPerPage), 1);
   
-  // Only reset to page 1 if data reference changes (not on every render)
+  // Only reset to page 1 if data reference changes
   useEffect(() => {
     // Compare by length and first item as a basic check if data changed
     if (data && (!dataRef.current || 
@@ -61,7 +57,7 @@ export function usePagination<T>({
     currentPage * itemsPerPage
   );
   
-  // Navigation functions - implement with direct state updates
+  // Navigation functions with direct state updates
   const goToPage = (page: number) => {
     const validPage = Math.max(1, Math.min(page, totalPages));
     if (validPage !== currentPage) {

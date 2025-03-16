@@ -3,7 +3,13 @@
 @theme {
   --color-ibge-blue: #0066CC;
   --color-ibge-green: #00AB84;
-  
+  --color-primary: #6366F1;   
+  --color-secondary: #A855F7;  
+  --color-accent: #8B5CF6;     
+  --color-success: #10B981;    
+  --color-danger: #EF4444;     
+  --color-background: #F5F3FF; 
+  --color-card: #FFFFFF;       
   --font-sans: system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
@@ -28,23 +34,17 @@ h1, h2, h3, h4, h5, h6 {
   @apply font-semibold;
 }
 
-/* Classe para componentes que precisam ocupar toda a largura em dispositivos móveis */
+/* Class for components that need to occupy the whole width on mobile */
 .full-width-mobile {
   @apply mx-[-16px] sm:mx-0 w-screen sm:w-auto;
 }
 
-/* Sobrescreve o padding em dispositivos móveis para componentes específicos */
+/* Override the padding on mobile for certain components */
 .full-width-mobile > div {
   @apply px-3 sm:px-0;
 }
 
 /* New Tailwind v4 utilities */
 @layer components {
-  .btn-primary {
-    @apply bg-ibge-blue text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors;
-  }
-  
-  .card {
-    @apply bg-white rounded-lg shadow-md p-6;
-  }
+
 }
