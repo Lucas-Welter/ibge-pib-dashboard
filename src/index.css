@@ -28,6 +28,16 @@ h1, h2, h3, h4, h5, h6 {
   @apply font-semibold;
 }
 
+/* Classe para componentes que precisam ocupar toda a largura em dispositivos móveis */
+.full-width-mobile {
+  @apply mx-[-16px] sm:mx-0 w-screen sm:w-auto;
+}
+
+/* Sobrescreve o padding em dispositivos móveis para componentes específicos */
+.full-width-mobile > div {
+  @apply px-3 sm:px-0;
+}
+
 /* New Tailwind v4 utilities */
 @layer components {
   .btn-primary {
